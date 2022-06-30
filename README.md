@@ -17,8 +17,9 @@ This week's project is to create a Youtube clone.
 
 ## Data Model
 
-1. Addition of a Video model.  Note that a Video has a relationship to a user and visa versa.
-2. Here we're treating users as 'channels', which means a user can subscribe to another users.  For this, we need 'many-to-many' self relations, e.g. 
+1. Addition of a Video model. Note that a Video has a relationship to a user and visa versa.
+2. Here we're treating users as 'channels', which means a user can subscribe to another users. For this, we need 'many-to-many' self relations, e.g.
+
 ```
 model User {
   //...
@@ -26,4 +27,13 @@ model User {
   subscribers  User[] @relation("Subscribers", references: [id])
   subscribedTo User[] @relation("Subscribers", references: [id])
 }
+```
+
+The above generates an error: Error parsing attribute "@relation": Implicit many-to-many relation should not have references argument defined. Either remove it, or change the relation to one-to-many.
+
+This seems to work, but it's yet to be seen (since I don't understand the error nor the Prisma docs).
+
+```
+  subscribers   User[] @relation("Subscribers")
+  subscribedTo  User[] @relation("Subscribers")
 ```
