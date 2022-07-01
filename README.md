@@ -37,3 +37,25 @@ This seems to work, but it's yet to be seen (since I don't understand the error 
   subscribers   User[] @relation("Subscribers")
   subscribedTo  User[] @relation("Subscribers")
 ```
+
+To downgrade to a different version: npm install -D prisma@3 The latest version is 4.0.0 which may have some problems. Flavio indicates the above solution should work.
+
+## Setup Fake Data
+
+1. As before, the fake data generator will reside in '/page/utils.js' and the API handler in '/api/utils.js'. And as before, install the fake generator module:
+
+```
+npm install -D @faker-js/faker
+```
+
+2. Cleaning the database - by deleting everything in the User table, this also deletes the videos since there is a relationship between the user and videos.
+3. Add some videos to S3 - the tutorial suggests you use videos of less than 10MB - you can download them from https://sample-videos.com/, but this seems like a suspicious site to me. I took some of my JustYummy videos and converted them to MP4 (used iMovie). Most are bigger than 10MB, so it's to be seen how much trouble the larger size will be.
+4. URLs for the video and thumbnail - upload the files to S3 and then access the Object URL - this will be used when generating content.
+5. Install the AWS sdk:
+
+```
+npm install aws-sdk
+```
+
+6. I changed the buttons to show a light blue hover color - copied from changes in Week 11.
+7. In the tutorial, there are instructions for creating a black background - TBD whether I'll add those changes or not.
