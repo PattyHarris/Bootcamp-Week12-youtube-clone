@@ -7,14 +7,19 @@ export default function Video({ video }) {
     <div className="">
       <div className="px-5 pb-5">
         {video.thumbnail && (
-          <Image
-            className="mb-2 cursor-pointer"
-            src={video.thumbnail}
-            width="800"
-            height="450"
-            alt={video.title}
-          />
+          <Link href={`/video/${video.id}`}>
+            <a>
+              <Image
+                className="mb-2 cursor-pointer"
+                src={video.thumbnail}
+                width="800"
+                height="450"
+                alt={video.title}
+              />
+            </a>
+          </Link>
         )}
+
         <p className="text-white float-right relative -mt-11 mr-1 bg-black p-1">
           {Math.floor(video.length / 60)
             .toString()

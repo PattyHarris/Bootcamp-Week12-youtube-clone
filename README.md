@@ -106,3 +106,27 @@ export default timeago
 ```
 
 If the screen is large, the videos are 1/3 the size, medium, 1/2 the size, otherwise they are full size.
+
+## Single Video Page
+
+1. Create the video page at 'pages/video/[id].js'.
+2. Add a 'getVideo' function to 'data.js'.
+3. We need a video player, so install:
+
+```
+npm install react-player
+```
+
+More information about this player: https://github.com/cookpete/react-player#readme
+
+4. Update the video page '[id].js' with the video player setup and JSX.
+5. Additional JSX added to '[id].js' to provide a link back to the 'home' page as well as data about the video (e.g. author name, etc.).
+6. Missed a 'Link' around the video image - added. Found an issue as well - if you put a 'Link' around a 'Image', you also need a surrounding 'a' tag.
+7. Show a list of latest videos on the right of the video shown in 'SingleVideo'. The list is limited to 3 videos. If the screen size is small, this side list of videos is hidden.
+8. To limit the number of videos to 3, we use the 'options' parameter.
+9. There is an issue with the react player (Flavio discusses in the video) that is fixed by dynamically loading the player - which explains this code:
+
+```
+import dynamic from "next/dynamic";
+const ReactPlayer = dynamic(() => import("react-player/lazy"), { ssr: false });
+```
