@@ -59,3 +59,50 @@ npm install aws-sdk
 
 6. I changed the buttons to show a light blue hover color - copied from changes in Week 11.
 7. In the tutorial, there are instructions for creating a black background - TBD whether I'll add those changes or not.
+8. **Note** that in this version of the user creation, an image and username is also include.
+
+## Homepage with Video List
+
+1. As part of creating the home page, we'll create new components 'Videos' and 'Video'.
+2. The timeago module needs to be installed:
+
+```
+npm install javascript-time-ago
+```
+
+Along with that install, add a file to 'lib/timeago.js:
+
+```
+import TimeAgo from 'javascript-time-ago'
+import en from 'javascript-time-ago/locale/en'
+
+TimeAgo.addLocale(en)
+
+const timeago = new TimeAgo('en-US')
+
+export default timeago
+```
+
+3. Add 'lib/data.js' and insert the 'getVideos' API handler.
+4. In 'index.js', import 'getVideos' which is then used in the 'getServerSideProps'.
+5. The 'Videos' component will handle printing the video information.
+6. The 'Video' component will complain about not having 'alt' - added to use the video title. 'Image' is used here instead of 'img' to help with setting the ratio. To use 'Image' we need to give it our domain. Add the AWS S3 domains to the 'next.config.js'.
+7. It was a bit tricky to get the thumbnail the right size - 'Image' uses a 800x450 (wxh) image, so the Lucy image had to be resized in Sketch.
+8. The 'Video' component also displays additional author information and timestamp data.
+9. Add inks to the single video page, which will be '/video/<VIDEO ID>' and to the user’s profile, which is '/channel/<USERNAME>'.
+10. Turns out at this point, if I don't use the global.css setting to change the background to black, the header on main page is white.
+11. In the 'Videos' component, the tailwind is interesting since it resizes the videos based on the screen size:
+
+```
+  return (
+    <div className="flex flex-wrap bg-black">
+      {videos.map((video, index) => (
+        <div className="w-full md:w-1/2 lg:w-1/3" key={index}>
+          <Video video={video} />
+        </div>
+      ))}
+    </div>
+
+```
+
+If the screen is large, the videos are 1/3 the size, medium, 1/2 the size, otherwise they are full size.

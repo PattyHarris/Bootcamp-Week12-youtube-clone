@@ -29,17 +29,19 @@ export default async function handler(req, res) {
       await prisma.user.create({
         data: {
           name: fakeNames[count],
+          username: faker.internet.userName().toLowerCase(),
           email: faker.internet.email().toLowerCase(),
+          image: faker.image.avatar(),
         },
       });
       count++;
     }
 
     const videoUrl =
-      "https://bootcamp-pharry.s3.us-west-1.amazonaws.com/Day1Turn2.mp4";
+      "https://bootcamp-pharry.s3.us-west-1.amazonaws.com/Lucy.mp4";
 
     const thumbnailUrl =
-      "https://bootcamp-pharry.s3.us-west-1.amazonaws.com/movieThumbNail1.jpg";
+      "https://bootcamp-pharry.s3.us-west-1.amazonaws.com/lucyThumbnailSmall.png";
 
     // Random user setup.
     const users = await prisma.user.findMany();
