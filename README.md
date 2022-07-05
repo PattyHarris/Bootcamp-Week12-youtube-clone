@@ -130,3 +130,29 @@ More information about this player: https://github.com/cookpete/react-player#rea
 import dynamic from "next/dynamic";
 const ReactPlayer = dynamic(() => import("react-player/lazy"), { ssr: false });
 ```
+
+## User Profile Page (Channels)
+
+1. Each user has a channel on the URL `channel/<USERNAME>`. Create a file `pages/channel/[username].js`
+2. Add 'getUser' to 'data.js'.
+3. Update 'getVideos' to use the 'options' parameter for 'author' - if set, return only the videos for a given author.
+4. Add the calls to 'getUser' and 'getVideos' to 'getServerSideProps', changing the input parameters to 'Channel' as well.
+5. Use the 'Videos' component inside of 'Channel' to print the video information for this user.
+6. Note: a good practice is to use simple code samples to start components, etc. Here is an example of a component - doesn't do anything, but has the starter framework.
+
+```
+export default function Channel({  }) {
+  return (
+    <>
+    </>
+  )
+}
+
+export async function getServerSideProps(context) {
+	//we have the username in context.params.username
+  return {
+    props: {
+    },
+  }
+}
+```
