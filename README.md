@@ -156,3 +156,12 @@ export async function getServerSideProps(context) {
   }
 }
 ```
+
+## Common Header Component
+
+1. Add the new component 'Heading.js'.
+2. Refactor 'pages/index.js', 'pages/video/[id].js' and 'pages/channel/[username].js' to use the new header component. Note that each page must also include the following import if it's not already there:
+
+```
+import Head from 'next/head'
+```
