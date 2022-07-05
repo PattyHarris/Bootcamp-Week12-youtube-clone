@@ -165,3 +165,27 @@ export async function getServerSideProps(context) {
 ```
 import Head from 'next/head'
 ```
+
+## Implement Pagination
+
+1. Store the number of videos per page in a new config file 'lib/config.js'. The current number of videos per page is currently set to 3.
+2. Refactor 'getVideos' to use the new 'amount' value - seems like 'amount' should be 'videosPerPage' or something more clear...
+3. We'll also be making use of offset-based pagination - see code for data.skip: "Offset pagination uses 'skip' and 'take' to skip a certain number of results and select a limited range"
+4. To load more videos, add a new component 'LoadMore.js' and include the component in 'index.js'.
+5. Add a new endpoint handler 'pages/api/videos.js'.
+6. Add an 'onClick' handler to 'LoadMore' and pass in 'videos' to the component (in 'index.js'). The url in the 'onClick' can then use the following url:
+
+```
+const url = `/api/videos?skip=${videos.length}`
+```
+
+The reason we don't use just the 'length' for the prop into LoadMore is that later in the lesson, the fetch for more videos will add to the initial set of videos.  
+7. To check for the 'end', we check that the returned number of videos is less than our 'amount'. The code to check for the end not explained well, but if you look at how the following hooks are used, it makes sense -
+
+```
+const [videos, setVideos] = useState(initialVideos)
+const [reachedEnd, setReachedEnd] = useState(false)
+
+```
+
+8. The logic here works pretty well except when there is exactly the number of videos = amount. For example, if the user has exactly 3 videos and amount = 3, the 'Load More' button still shows. I would think in this case, it would not show. But if you check for '<= amount' (in LoadMore), that doesn't work since the amount returned is always going to be '<= amount'. What needs to happen is that there is some sort of 'look ahead'...
