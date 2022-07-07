@@ -189,3 +189,41 @@ const [reachedEnd, setReachedEnd] = useState(false)
 ```
 
 8. The logic here works pretty well except when there is exactly the number of videos = amount. For example, if the user has exactly 3 videos and amount = 3, the 'Load More' button still shows. I would think in this case, it would not show. But if you check for '<= amount' (in LoadMore), that doesn't work since the amount returned is always going to be '<= amount'. What needs to happen is that there is some sort of 'look ahead'...
+
+## Implement Login, User Profile
+
+1. In this login scenario, the user can upload an avatar for their profile.
+2. Add a 'login' or 'logout' button and click handler to 'Heading.js'.
+3. In 'index.js' direct the user to the 'setup' page if they have not set up their profile.
+4. Add 'pages/setup.js' which is pretty much the same as we've done before. The API handler will be 'api/setup.js' - first we need to install the middleware as we did in the Reddit Clone:
+
+```
+npm install multiparty next-connect@0.12.2
+```
+
+Note: the version here is critical. 'next-connect' has a new version which will cause a lot of breakage in the project.
+
+5. Create the file 'middleware/middleware.js' that will have the middleware setup code. Its job is to make the files information available in the API route. 6. To handle various upload tasks, add a new file 'lib/upload.js'. 7. Add the 'api/setup.js' to handle the processing of the setup data request. Note that since we're using the middleware, we need to use '[0]' for all body fields. 8. Ran into a problem where we when the index page redirects to setup, I encountered the following error:
+
+```
+next-dev.js?3515:24 Error: Abort fetching component for route: "/setup"
+    at handleCancelled (router.js?8684:1520:27)
+    at _callee$ (router.js?8684:1088:13)
+    at tryCatch (runtime.js?ecd4:45:16)
+    at Generator.invoke [as _invoke] (runtime.js?ecd4:274:1)
+    at prototype.<computed> [as next] (runtime.js?ecd4:97:1)
+    at asyncGeneratorStep (_async_to_generator.js?0e30:23:1)
+    at _next (_async_to_generator.js?0e30:12:1)
+```
+
+Turns out that 'next' has been updated to 12.2.0 - Flavio's version is 12.1.6 - the redirection works fine in 12.1.6. I have installed the old version to move along.
+
+Turns out we need to return 'null' - so the following code works:
+
+```
+if (session && !session.user.name) {
+    router.push("/setup");
+    return null;
+  }
+
+```
