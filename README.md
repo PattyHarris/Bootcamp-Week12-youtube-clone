@@ -258,3 +258,12 @@ let videos = await getVideos({ subscriptions: session.user.id }, prisma)
 12. In the 'subscriptions' page, pass 'subscriptions' as a prop to 'LoadMore' to provide the same filter.
 13. Refactor 'LoadMore' to handle the 'subscriptions' prop.
 14. In 'pages/api/videos.js' handle the 'subscriptions' option.
+
+## Increment Video Views
+
+1. Each time a video is viewed, increment the count of views.
+2. Use the 'useEffect' hook to control the count when the video is loaded. This must be the first bit of code in the function. Also, there is a async function defined ('incrementViews') which is then called - this is because you can't declare the useEffect code as async.
+3. Also, as of React 18, in development mode, useEffect is called twice (in production it's called once). The behavior can be changed by setting 'reactStrictMode' to false in next.config.js, but that is not recommended.
+4. In 'pages/video/[id].js' page, add the import for 'useEffect'.
+5. Add a new endpoint handler 'api/view.js'.
+6. In 'pages/video/[id].js' increment the count of views by 1 so that it shows 1 (the logged in user view) and not 0.
