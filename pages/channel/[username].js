@@ -4,16 +4,38 @@ import Head from "next/head";
 
 import { useState } from "react";
 
-import { getUser, getVideos } from "lib/data";
+import {
+  getUser,
+  getVideos,
+  getSubscribersCount,
+  isSubscribed,
+} from "lib/data";
+
 import { amount } from "lib/config";
 
 import Videos from "components/Videos";
 import LoadMore from "components/LoadMore";
 import Heading from "components/Heading";
+import SubscribedButton from "components/SubscribedButton";
 
-export default function Channel({ user, initialVideos }) {
+import { useSession, getSession } from "next-auth/react";
+
+export default function Channel({
+  user,
+  initialVideos,
+  subscribers,
+  subscribed,
+}) {
   const [videos, setVideos] = useState(initialVideos);
   const [reachedEnd, setReachedEnd] = useState(initialVideos.length < amount);
+
+  const { data: session, status } = useSession();
+
+  const loading = status === "loading";
+
+  if (loading) {
+    return null;
+  }
 
   if (!user) {
     return <p className="text-center p-5">Channel does not exist 😞</p>;
@@ -39,7 +61,19 @@ export default function Channel({ user, initialVideos }) {
             )}
             <div className="mt-5">
               <p className="text-lg font-bold text-white">{user.name}</p>
+              <div className="">
+                <div className="">
+                  <div className="text-gray-400">{subscribers} subscribers</div>
+                </div>
+              </div>
             </div>
+          </div>
+          <div className="mt-12 mr-5">
+            {session && user.id === session.user.id ? (
+              <></>
+            ) : (
+              <SubscribedButton user={user} subscribed={subscribed} />
+            )}
           </div>
         </div>
         <div>
@@ -67,10 +101,24 @@ export async function getServerSideProps(context) {
   let videos = await getVideos({ author: user.id }, prisma);
   videos = JSON.parse(JSON.stringify(videos));
 
+  const subscribers = await getSubscribersCount(
+    context.params.username,
+    prisma
+  );
+
+  const session = await getSession(context);
+
+  let subscribed = null;
+  if (session) {
+    subscribed = await isSubscribed(session.user.username, user.id, prisma);
+  }
+
   return {
     props: {
       user,
       initialVideos: videos,
+      subscribers,
+      subscribed,
     },
   };
 }

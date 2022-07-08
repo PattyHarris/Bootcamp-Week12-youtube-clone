@@ -227,3 +227,34 @@ if (session && !session.user.name) {
   }
 
 ```
+
+## Add User Information to Header
+
+1. Here the user information is added to the header. Clicking on the image will then show the user's channel page.
+2. In the 'Heading' component, add the user data with a link using the user's username.
+3. Ran into another bug where '[...nextauth].js' was missing the user's image, username, and name fields in the 'callbacks' section. The code is correct if you use the 'start' code, but not shown in the text tutorial.
+
+## Subscriptions
+
+1. In this section:
+   1. Show the subscribers count in the channels pages.
+   2. Add a button on the channels to subscribe. Once subscribed, this will turn into an unsubscribe button.
+   3. Add a “subscriptions” page that lists the videos of the people you’re subscribed to.
+2. Starting with the subscribers count, add 'getSubscribersCount' to 'data.js'.
+3. Add the subscriber count to 'channel/[username].js'.
+4. All people to subscribe: add a 'SubscribedButton' component and add to 'pages/channel/[username].js'. The ''post' request from this button is handled by '/api/subscribe' - see this code for how subscriptions are setup using a special syntax that uses 'connect' to connect 2 users together via the subscribedTo relation, as it’s a many-to-many self relation in the database.
+5. Add 'api/unsubscribe' that uses 'disconnect' to un-connect 2 users.
+6. In order for the 'Subscribe' button to change state, we need to add 'isSubscribed' to 'data.js'. Add a call to this new function in '[username].js' in the 'getServerSideProps'.
+7. Pass 'subscribers' to the 'SubscribeButton'.
+8. When you hover over the 'SubscribeButton' when it's green (e.g. you've subscribed), it will change text and color to show what happens if it's clicked. See 'useState'. The code DOES NOT do the reverse, that is, if it's showing 'Unsubscribe', hovering does not show 'Subscribe' and green.
+9. Add the subscription page which shows which people you're subscribe to? Create the 'subscriptions' page. We copy the code from 'index.js' with a couple of changes for subscriptions - this and the call to 'LoadMore'.
+
+```
+let videos = await getVideos({ subscriptions: session.user.id }, prisma)
+```
+
+10. The 'Heading' component is refactored to show the subscriptions link. There's a bug in the tutorial which shows the 'Heading' component taking 'subscriptions' as a prop - doesn't need it.
+11. Update 'getVideos' to look at the 'subscriptions' options - this will filter the list of videos to return only those the user is subscribe to.
+12. In the 'subscriptions' page, pass 'subscriptions' as a prop to 'LoadMore' to provide the same filter.
+13. Refactor 'LoadMore' to handle the 'subscriptions' prop.
+14. In 'pages/api/videos.js' handle the 'subscriptions' option.
