@@ -267,3 +267,11 @@ let videos = await getVideos({ subscriptions: session.user.id }, prisma)
 4. In 'pages/video/[id].js' page, add the import for 'useEffect'.
 5. Add a new endpoint handler 'api/view.js'.
 6. In 'pages/video/[id].js' increment the count of views by 1 so that it shows 1 (the logged in user view) and not 0.
+
+## Post New Video
+
+1.  In 'pages/channel/[username].js', add a link to 'upload'.
+2.  The rest of the work is done in 'pages/upload.js' and 'pages/api/upload.js'.
+3.  In 'pages/upload.js', add a form to upload a video.
+4.  The form is setup to ensure that the 3 fields are completed - see the 'accept' props. The 'upload' button is disabled until the data is completed.
+5.  'pages/api/upload.js' handles the endpoint and uses the 'upload' function in 'data.js' that we wrote earlier.

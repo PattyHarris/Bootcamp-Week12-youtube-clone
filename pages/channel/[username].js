@@ -70,7 +70,13 @@ export default function Channel({
           </div>
           <div className="mt-12 mr-5">
             {session && user.id === session.user.id ? (
-              <></>
+              <>
+                <Link href={`/upload`}>
+                  <a className="bg-green-500 px-3 py-2  rounded-md">
+                    Upload new video
+                  </a>
+                </Link>
+              </>
             ) : (
               <SubscribedButton user={user} subscribed={subscribed} />
             )}
